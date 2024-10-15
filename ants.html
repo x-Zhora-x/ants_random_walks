@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Ant Simulation with Tutorial</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 1px solid black;
+        }
+        #controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #sliders {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+        #slider {
+            margin-left: 10px;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #antCountValue,
+        #speedValue {
+            min-width: 30px;
+            text-align: center;
+        }
+        #description {
+            margin-top: 15px;
+            max-width: 800px;
+            text-align: center;
+            font-size: 14px;
+            color: #333;
+        }
+        /* Tutorial Styling */
+        .arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid black; /* Arrow now points upwards */
+        }
+        .tutorial-box {
+            position: absolute;
+            background: white;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+            max-width: 200px;
+            text-align: center;
+        }
+        #nextButton {
+            display: block;
+            margin-top: 10px;
+            padding: 5px;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Walk Simulator with Ants</h1>
+    <canvas id="canvas"></canvas>
+    <div id="controls">
+        <button id="pauseButton" onclick="pause()" disabled>Pause</button>
+        <button id="resumeButton" onclick="resume()">Resume</button>
+        <button id="addFoodButton" style="background-color: rgba(0, 255, 0, .1);" onclick="toggleAddFoodMode()">Add Food Mode</button>
+        <button id="removeFoodButton" style="background-color: rgba(255, 0, 0, .1);" onclick="toggleRemoveFoodMode()">Remove Food Mode</button>
+        <button id="resetButton" onclick="resetSimulation()">Reset</button>
+        <label>
+            Draw Mode:
+            <select id="drawMode" onchange="setDrawMode(this.value)">
+                <option value="ant" selected>Ants</option>
+                <option value="arrow">Arrows</option>
+            </select>
+        </label>
+    </div>
+    <div id="sliders">
+        <label for="antCountSlider">Number of Ants:
+            <input id="antCountSlider" type="range" min="50" max="150" value="100" step="1" onchange="updateAntCount(this.value)">
+            <span id="antCountValue">100</span>
+        </label>
+        <label for="speedSlider">Ant Speed:
+            <input id="speedSlider" type="range" min="0.5" max="3" value="1" step="0.1" onchange="adjustSpeed(this.value)">
+            <span id="speedValue">1x</span>
+        </label>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div class="overlay" id="tutorialOverlay">
+        <div class="arrow" id="arrow"></div>
+        <div class="tutorial-box" id="tutorialBox">
+            <p id="tutorialText"></p>
+            <button id="nextButton" onclick="nextStep()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        // Tutorial steps
+        const steps = [
+            { element: '#pauseButton', text: 'Click here to pause the simulation.' },
+            { element: '#resumeButton', text: 'Click here to resume the simulation.' },
+            { element: '#addFoodButton', text: 'Those green circles are food and the scent around them. Click this to create more food sources.' },
+            { element: '#removeFoodButton', text: 'Click here to remove existing food sources.' },
+            { element: '#resetButton', text: 'Click here to reset the simulation.' },
+            { element: '#drawMode', text: "If you're squeamish about seeing bugs, you can change the ants to arrows." }, 
+            { element: '#antCountSlider', text: 'Use this slider to adjust the number of ants.' },
+            { element: '#speedSlider', text: 'Use this slider to adjust the speed of the ants.' }
+        ];
+        let currentStep = 0;
+
+        function showTutorialStep(stepIndex) {
+            const overlay = document.getElementById('tutorialOverlay');
+            const arrow = document.getElementById('arrow');
+            const tutorialBox = document.getElementById('tutorialBox');
+            const tutorialText = document.getElementById('tutorialText');
+            const step = steps[stepIndex];
+            
+            // Find the target element
+            const targetElement = document.querySelector(step.element);
+            if (!targetElement) return;
+
+            // Get element position and size
+            const rect = targetElement.getBoundingClientRect();
+
+            // Position the arrow below the element
+            arrow.style.top = `${rect.bottom + window.scrollY + 10}px`;
+            arrow.style.left = `${rect.left + rect.width / 2 - 20}px`; // Center the arrow under the element
+
+            // Position the tutorial box below the arrow
+            tutorialBox.style.top = `${rect.bottom + window.scrollY + 50}px`;
+            tutorialBox.style.left = `${rect.left + rect.width / 2 - 100}px`; // Center the tutorial box
+
+            // Set the tutorial text
+            tutorialText.innerText = step.text;
+
+            // Display the overlay
+            overlay.style.display = 'block';
+        }
+
+        function nextStep() {
+            currentStep++;
+            if (currentStep < steps.length) {
+                showTutorialStep(currentStep);
+            } else {
+                // Hide the tutorial when finished
+                document.getElementById('tutorialOverlay').style.display = 'none';
+            }
+        }
+
+        // Start the tutorial
+        document.addEventListener('DOMContentLoaded', () => {
+            showTutorialStep(currentStep);
+        });
+    </script>
+<script src="antscript.js"></script>
+</body>
+</html>
