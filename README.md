@@ -20,8 +20,7 @@
    - The ants are drawn with distinct body parts and even change color when carrying food back to the nest.
    - Food sources have scent circles around them, showing how ants detect and move toward food.
 
-4. **Guided Tutorial**:
-   - New to the simulation? No problem! A friendly tutorial will walk you through everything you need to know when you start up
+
 
 ---
 Lol ants 🐜
