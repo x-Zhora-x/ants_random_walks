@@ -125,7 +125,7 @@
         const steps = [
             { element: '#pauseButton', text: 'Click here to pause the simulation.' },
             { element: '#resumeButton', text: 'Click here to resume the simulation.' },
-            { element: '#addFoodButton', text: 'Those green circles are food and the scent around them. Click this to create more food sources.' },
+            { element: '#addFoodButton', text: 'Green circles are food and the scent around them. Click this to create more food sources.' },
             { element: '#removeFoodButton', text: 'Click here to remove existing food sources.' },
             { element: '#resetButton', text: 'Click here to reset the simulation.' },
             { element: '#drawMode', text: "If you're squeamish about seeing bugs, you can change the ants to arrows." }, 
@@ -149,11 +149,11 @@
             const rect = targetElement.getBoundingClientRect();
 
             // Position the arrow below the element
-            arrow.style.top = `${rect.bottom + window.scrollY + 10}px`;
+            arrow.style.top = `${rect.bottom + window.scrollY - 50}px`;
             arrow.style.left = `${rect.left + rect.width / 2 - 20}px`; // Center the arrow under the element
 
             // Position the tutorial box below the arrow
-            tutorialBox.style.top = `${rect.bottom + window.scrollY + 50}px`;
+            tutorialBox.style.top = `${rect.bottom + window.scrollY - 170}px`;
             tutorialBox.style.left = `${rect.left + rect.width / 2 - 100}px`; // Center the tutorial box
 
             // Set the tutorial text
