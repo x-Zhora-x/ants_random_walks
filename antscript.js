@@ -13,7 +13,7 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 canvas.width = 800;
-canvas.height = 600;
+canvas.height = window.innerHeight * (4 / 7);
 
 let nest = { x: canvas.width / 2, y: canvas.height / 2};
 
